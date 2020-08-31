@@ -1,11 +1,13 @@
 <template>
   <div class="wrapper">
-      <div class="header">
-        Shooter
-      </div>
+
       <div class="gamemodes">
-        <button @click="handleSwitch('solo')">Solo</button>
-        <button @click="handleSwitch('multi')">2 graczy</button>
+        <button @click="handleSwitch('solo')">
+          <img src="~/assets/images/solo.gif">
+        </button>
+        <button @click="handleSwitch('multi')">
+          <img src="~/assets/images/2graczy.gif">
+        </button>
       </div>
   </div>
 </template>

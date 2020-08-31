@@ -5,4 +5,10 @@ canvas {
 .gra {
   text-align: center;
 }
+
+.header {
+  font-size: 60px;
+  text-shadow: 4px 4px 6px #f85205;
+  text-align: center;
+}
 /*# sourceMappingURL=indexStyles.css.map */

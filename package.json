@@ -9,6 +9,7 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "bootstrap": "^4.5.2",
     "nuxt": "^2.14.0"
   },
   "devDependencies": {}

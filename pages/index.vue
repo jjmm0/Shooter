@@ -1,8 +1,10 @@
 <template>
   <div class="wrapper">
 
-    <HomePage @change-gamemode="changeMode($event)"/>
-
+      <div class="header">
+        <img src="~/assets/images/shooter.gif">
+      </div>
+    <HomePage @change-gamemode="changeMode($event)" v-if="!mode"/>
     <div class="gra" v-show="mode == 'multi'">
       <MultiGame :mode="mode"/>
     </div>
