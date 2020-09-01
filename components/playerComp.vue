@@ -6,6 +6,7 @@
   </div>
 </template>
 <script>
+import Bullet from '~/classes/Bullet.js'
 
 export default {
 
@@ -30,6 +31,9 @@ export default {
       downPressed: false,
       leftPressed: false,
       rightPressed: false,
+        //for shooting
+        p1Shoot: false,
+        p2Shoot: false,
       //speed variable
       SPEED: 1,
       speedLimit: 5,
@@ -37,11 +41,24 @@ export default {
       //obstacles
       //id
       i: 0,
+      //shooting
+      pistolHitbox: 2,
+      pistolDmg: 10,
+      p1Weapon: 'Pistol',
+      p2Weapon: 'Pistol',
+      // pBullets: [],
+      // active: true,
+      // color: 'yellow',
+      // yVel: 1,
+      // xVel: 1,
+      // x: 1,
+      // y: 1,
+
 
     }
   },
   computed:{
-
+    
   },
   mixins:[
 
@@ -68,6 +85,9 @@ export default {
         case 'KeyD':
           this.dPressed = true;
           break;
+        case 'Space':
+          this.p1Shoot = true;
+          break;
         }
       })
     document.addEventListener('keyup', event => {
@@ -83,6 +103,9 @@ export default {
         break;
         case 'KeyD':
           this.dPressed = false; 
+        break;
+        case 'Space':
+          this.p1Shoot = false; 
         break;
       }
     }) 
@@ -101,6 +124,9 @@ export default {
       case 'ArrowRight':
         this.rightPressed = true;
         break;
+      case 'Slash':
+        this.p2Shoot = true;
+        break;
       }})
     document.addEventListener('keyup', event => {
       switch (event.code) {
@@ -116,16 +142,32 @@ export default {
         case 'ArrowRight':
           this.rightPressed = false; 
         break;
+        case 'Slash':
+          this.p2Shoot = false; 
+        break;
       }
     }) 
   },
   methods:{
+    // Bullet(bullet) {
+    //   this.active = true;
+    //   this.color = "yellow";
+    //   this.yVel = -bullet.vel;
+    //   this.width = 2;
+    //   this.height = 4;
+    //   this.x = bullet.x;
+    //   this.y = bullet.y;
+    // },
+
     animate() {
       
-      let {id,wPressed, sPressed, aPressed, dPressed, upPressed, downPressed, leftPressed, rightPressed, player, slowing, SPEED, speedLimit, canvas, context, playerSize} = this 
+      let {id, pistolHitbox, p1Shoot, p2Shoot, wPressed, sPressed, aPressed, dPressed, upPressed, downPressed, leftPressed, rightPressed, player, slowing, SPEED, speedLimit, canvas, context, playerSize} = this 
       canvas = document.querySelector('#game');
       context = canvas.getContext('2d');
-      if(player.xSpeed <0 )debugger
+      //MOVEMENT - GENERAL//////////////////////////////////////////////////////////////////////
+      //MOVEMENT - GENERAL//////////////////////////////////////////////////////////////////////
+      //MOVEMENT - GENERAL//////////////////////////////////////////////////////////////////////
+      
 
       if(this.mode == 'multi'){
         if(id == 1){ 
@@ -144,17 +186,17 @@ export default {
         if(this.mode){
           if(id == 1){
             if(player.y < 1){wPressed = false; slowing = speedLimit; player.y = 1}
-            if(player.y > canvas.height){sPressed = false; slowing = speedLimit; player.y = 789}
+            if(player.y > canvas.height - playerSize){sPressed = false; slowing = speedLimit; player.y = 789}
             if(player.x < 1){aPressed = false; slowing = speedLimit; player.x = 1}
-            if(player.x > canvas.width){dPressed = false; slowing = speedLimit; player.x = 789}
+            if(player.x > canvas.width - playerSize){dPressed = false; slowing = speedLimit; player.x = 789}
           }
         }
         //for arrows
         if(id == 2){
           if(player.y < 1){upPressed = false; slowing = speedLimit; player.y = 1}
-          if(player.y > canvas.height){downPressed = false; slowing = speedLimit; player.y = 789}
+          if(player.y > canvas.height - playerSize){downPressed = false; slowing = speedLimit; player.y = 789}
           if(player.x < 0){leftPressed = false; slowing = speedLimit; player.x = 1}
-          if(player.x > canvas.width){rightPressed = false; slowing = speedLimit; player.x = 789}   
+          if(player.x > canvas.width - playerSize){rightPressed = false; slowing = speedLimit; player.x = 789}   
         }
       }
       // stopping movement
@@ -185,6 +227,14 @@ export default {
         if(this.id == 1){context.fillRect(player.x, player.y, playerSize, playerSize);}
         context.fillStyle = 'blue'
         if(this.id == 2){context.fillRect(player.x, player.y, playerSize, playerSize);}
+
+      //SHOOTING - GENERAL/////////////////////////////////////////////////////////////
+      //SHOOTING - GENERAL/////////////////////////////////////////////////////////////
+      //SHOOTING - GENERAL/////////////////////////////////////////////////////////////
+      if((id == 1 && p1Shoot) || (id == 2 && p2Shoot)){this.$emit('shot-by', id); }
+      // if(id == 2 && p2Shoot){this.$emit('shot-by', id);}
+
+      
         this.i++
       requestAnimationFrame(() => {
           this.animate();

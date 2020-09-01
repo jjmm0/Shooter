@@ -28,5 +28,5 @@ export default {
 </script>
 
 <style scoped>
-@import '~/assets/styles/homePageStyles.css';
+  @import '~/assets/styles/homePageStyles.css';
 </style>

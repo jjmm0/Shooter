@@ -1,9 +1,11 @@
 canvas {
   border: 1px dashed green;
+  position: absolute;
 }
 
-.gra {
-  text-align: center;
+#newbul {
+  margin-left: 800px;
+  position: absolute;
 }
 
 .header {
