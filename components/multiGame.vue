@@ -4,7 +4,7 @@
       <canvas class="game" width="800" height="800">
       </canvas>
       <canvas id="game" width="800" height="800"></canvas>
-      <button id="newbul" @click="newBullet()">asdfasdf</button>{{bullets}}
+      <button id="newbul" @click="newBullet()">asdfasdf</button>{{}}
       <Player :id="1" :mode="mode" @shot-by="handleShot($event)"/>
       <Player :id="2" :mode="mode" @shot-by="handleShot($event)"/>
     </div>
@@ -37,24 +37,23 @@ export default {
     this.animBullet()
   },
   methods:{
-    animBullet()
+    async animBullet()
     {
-      this.paintBullets()
+      await this.paintBullets()
       this.i++;
-        setTimeout(() => {
-          requestAnimationFrame(this.animBullet())
-          }, 100);
+      requestAnimationFrame(() => {
+          this.animBullet();
+      });
 
     },
-    handleShot(id){
-      console.log(id)
-      this.playerId = id
+    handleShot(args){
+      console.log(args.id)
+      this.newBullet(args)
     },
-    newBullet(){
+    newBullet(args){
       let {bullets, playerId} = this
-      bullets.push(new Bullet(playerId, 1, 2, 9, 10, 200, 200))
-      bullets.push(new Bullet(playerId, 1, 2, 9, 10, 300, 200))
-      bullets.push(new Bullet(playerId, 1, 2, 9, 10, 400, 200))
+      
+        bullets.push(new Bullet(args.id, args.yVel, args.xVel, 90, 10, args.xPos, args.yPos))
       // this.animBullet()
     },
     paintBullets(){
@@ -63,11 +62,14 @@ export default {
       let context = canvas.getContext('2d');
       let {bullets, } = this
       
+      context.clearRect(0, 0, canvas.width, canvas.height)
       this.bullets.forEach(bullet => {
-        
+        bullet._yPos += bullet._yVelocity
+        bullet._xPos += bullet._xVelocity
         context.fillStyle = 'green'
         context.fillRect(bullet._xPos, bullet._yPos, bullet._hitbox, bullet._hitbox)
-        console.log(bullet._xPos, bullet._yPos, bullet._hitbox, bullet._hitbox)
+
+        
         // context.clearRect(0, 0, canvas.width, canvas.height)
       });
     }

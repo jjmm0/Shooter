@@ -9,9 +9,7 @@ export default class Bullet {
         this._yPos = yPos
     };
 
-    requestAnimationFrame(){
-        this.bulletUpdate();
-    };
+
     static bulletUpdate(_yVelocity, _xVelocity, _hitbox, _xPos, _yPos)
     {            
         

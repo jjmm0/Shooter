@@ -44,8 +44,10 @@ export default {
       //shooting
       pistolHitbox: 2,
       pistolDmg: 10,
+      pistolBulletSpeed: 1,
       p1Weapon: 'Pistol',
       p2Weapon: 'Pistol',
+      bulletSpeed: 10,
       // pBullets: [],
       // active: true,
       // color: 'yellow',
@@ -58,11 +60,29 @@ export default {
     }
   },
   computed:{
-    
-  },
-  mixins:[
+    yVel: function(){
+      let result = 0
+      if(this.player.ySpeed > 0){result = this.bulletSpeed}
+      if(this.player.ySpeed < 0){result = -this.bulletSpeed}
 
-  ],
+      // if(this.wPressed && this.id == 1){result = this.bulletSpeed}
+      // if(this.sPressed && this.id == 1){result = -this.bulletSpeed}
+      // if(this.upPressed && this.id == 2){result = 2}
+      // if(this.downPressed && this.id == 2){result = -2}
+      return result
+    },
+    xVel: function(){
+      let result = 0
+      if(this.player.xSpeed > 0){result = this.bulletSpeed}
+      if(this.player.xSpeed < 0){result = -this.bulletSpeed}
+
+      // if(this.dPressed && this.id == 1){result = 2}
+      // if(this.aPressed && this.id == 1){result = -2}
+      // if(this.rightPressed && this.id == 2){result = 2}
+      // if(this.leftPressed && this.id == 2){result = -2}
+      return result
+    }
+  },
   props:{
       mode: String,
       id: Number
@@ -149,19 +169,10 @@ export default {
     }) 
   },
   methods:{
-    // Bullet(bullet) {
-    //   this.active = true;
-    //   this.color = "yellow";
-    //   this.yVel = -bullet.vel;
-    //   this.width = 2;
-    //   this.height = 4;
-    //   this.x = bullet.x;
-    //   this.y = bullet.y;
-    // },
 
     animate() {
       
-      let {id, pistolHitbox, p1Shoot, p2Shoot, wPressed, sPressed, aPressed, dPressed, upPressed, downPressed, leftPressed, rightPressed, player, slowing, SPEED, speedLimit, canvas, context, playerSize} = this 
+      let {id, yVel, xVel, pistolHitbox, p1Shoot, p2Shoot, wPressed, sPressed, aPressed, dPressed, upPressed, downPressed, leftPressed, rightPressed, player, slowing, SPEED, speedLimit, canvas, context, playerSize} = this 
       canvas = document.querySelector('#game');
       context = canvas.getContext('2d');
       //MOVEMENT - GENERAL//////////////////////////////////////////////////////////////////////
@@ -231,7 +242,11 @@ export default {
       //SHOOTING - GENERAL/////////////////////////////////////////////////////////////
       //SHOOTING - GENERAL/////////////////////////////////////////////////////////////
       //SHOOTING - GENERAL/////////////////////////////////////////////////////////////
-      if((id == 1 && p1Shoot) || (id == 2 && p2Shoot)){this.$emit('shot-by', id); }
+      let xPos = player.x
+      let yPos = player.y
+
+      if(((id == 1 && p1Shoot) || (id == 2 && p2Shoot)) &&(xVel || yVel))
+      {this.$emit('shot-by', {id, yVel, xVel, yPos, xPos }); }
       // if(id == 2 && p2Shoot){this.$emit('shot-by', id);}
 
       
