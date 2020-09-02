@@ -48,6 +48,7 @@ export default {
       p1Weapon: 'Pistol',
       p2Weapon: 'Pistol',
       bulletSpeed: 10,
+      timeout: false
       // pBullets: [],
       // active: true,
       // color: 'yellow',
@@ -243,18 +244,52 @@ export default {
       //SHOOTING - GENERAL/////////////////////////////////////////////////////////////
       //SHOOTING - GENERAL/////////////////////////////////////////////////////////////
       let xPos = player.x
+
+      // let timeout = false
       let yPos = player.y
 
-      if(((id == 1 && p1Shoot) || (id == 2 && p2Shoot)) &&(xVel || yVel))
-      {this.$emit('shot-by', {id, yVel, xVel, yPos, xPos }); }
+      //   if(((id == 1 && p1Shoot) || (id == 2 && p2Shoot)) &&(xVel || yVel) && !this.timeout)
+      //   {this.$emit('shot-by', {id, yVel, xVel, yPos, xPos });this.timeout = true }
+      //   if(this.timeout){
+      //     await setTimeout(() => {
+      //       this.timeout = false
+      //     }, 1000)
+      //   }
+
+      this.shoot()
+
       // if(id == 2 && p2Shoot){this.$emit('shot-by', id);}
 
-      
+      this.$emit('check-hitbox', {yPos, xPos, playerSize, id})
         this.i++
       requestAnimationFrame(() => {
           this.animate();
       });
     },
+     shoot(){
+        let {id,timeout, yVel, xVel, pistolHitbox, p1Shoot, p2Shoot, wPressed, sPressed, aPressed, dPressed, upPressed, downPressed, leftPressed, rightPressed, player, slowing, SPEED, speedLimit, canvas, context, playerSize} = this 
+
+      let xPos = player.x
+
+      let yPos = player.y
+
+      if(((id == 1 && p1Shoot) || (id == 2 && p2Shoot)) &&(xVel || yVel) && timeout == false)
+      { 
+        
+        this.$emit('shot-by', {id, yVel, xVel, yPos, xPos });
+        timeout = true
+      }
+        console.log(timeout)
+      if(timeout){
+         this.setTimeoutToFalse()
+
+      }
+    },
+    setTimeoutToFalse(){
+      setTimeout(function() {
+        this.timeout = false
+      }, 1000);
+    }
 
   },
 }
