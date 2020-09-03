@@ -86,7 +86,9 @@ export default {
   },
   props:{
       mode: String,
-      id: Number
+      id: Number,
+      neededId: String,
+      sendData: Boolean,
   },
   mounted(){
     this.animate()
@@ -245,20 +247,11 @@ export default {
       //SHOOTING - GENERAL/////////////////////////////////////////////////////////////
       //SHOOTING - GENERAL/////////////////////////////////////////////////////////////
       let xPos = player.x
-
-      // let timeout = false
       let yPos = player.y
 
-      //   if(((id == 1 && p1Shoot) || (id == 2 && p2Shoot)) &&(xVel || yVel) && !this.timeout)
-      //   {this.$emit('shot-by', {id, yVel, xVel, yPos, xPos });this.timeout = true }
-      //   if(this.timeout){
-      //     await setTimeout(() => {
-      //       this.timeout = false
-      //     }, 1000)
-      //   }
-
-
-      // if(id == 2 && p2Shoot){this.$emit('shot-by', id);}
+      
+      this.$emit('sending-data', {xPos, yPos, playerSize, id})
+      
 
       this.$emit('check-hitbox', {playerSize, id})
         this.i++

@@ -3,7 +3,7 @@
 
       <div class="header">
         <img src="~/assets/images/shooter.gif">
-    {{Bullet.velocity}}
+
       </div>
     <HomePage @change-gamemode="changeMode($event)" v-if="!mode"/>
     <div class="gra" v-if="mode == 'multi'">

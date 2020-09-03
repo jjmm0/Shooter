@@ -4,7 +4,7 @@
       <canvas class="game" width="800" height="800">
       </canvas>
       <canvas id="game" width="800" height="800"></canvas>
-      <button id="newbul" @click="newBullet()">asdfasdf</button>{{}}
+      
       <Player :id="1" :mode="mode" :sendData="sendData" :neededId="neededId" @shot-by="handleShot($event)" 
       @check-hitbox="checkHitbox($event)" @sending-data="handleSentData($event)"/>
       <Player :id="2" :mode="mode" :sendData="sendData" :neededId="neededId" @shot-by="handleShot($event)" 
@@ -31,8 +31,12 @@ export default {
       j: 0,
       k: 0,
       l: 0,
-      p1:{xPos,yPos,playerSize,id},
-      p2:{xPos,yPos,playerSize,id}
+      m: 0,
+      n: 0,
+      o: 0,
+      p: 0,
+      p1:{xPos: 0,yPos: 0,playerSize: 0,id: 0},
+      p2:{xPos: 0,yPos: 0,playerSize: 0,id: 0}
 
       
     }
@@ -40,9 +44,6 @@ export default {
   computed:{
 
   },
-  mixins:[
-
-  ],
   mounted(){
     this.animBullet()
   },
@@ -63,6 +64,7 @@ export default {
       bullets.push(new Bullet(args.id, args.yVel, args.xVel, 90, 10, args.xPos, args.yPos))
     },
     handleSentData(playerData){
+      let {p1, p2} = this
       if(playerData.id == 1){
         p1.xPos = playerData.xPos
         p1.yPos = playerData.yPos
@@ -75,7 +77,7 @@ export default {
         p2.playerSize = playerData.playerSize
         p2.id = playerData.id
       }
-      
+
     },
     paintBullets(){
       //variables
@@ -94,29 +96,59 @@ export default {
     },
     
     checkHitbox(args){
-      this.sendData = true
-      if(args.id == 2){this.neededId = 1}
-      if(args.id == 1){this.neededId = 2 }
-      let playerXPosition = args.xPos;
-      let playerYPosition = args.yPos;
-      let playerNum = args.id;
-      let playerSize = args.playerSize;
-
+      
+      let {p1, p2} = this
       
       //for player
-      let {i,j,k,l} = this
-      console.log('działa')
+      let {i,j,k,l, m, n,o ,p} = this
       this.bullets.forEach(bullet =>  {     
         
-        if((bullet._number != playerNum) && (bullet._xPos < playerXPosition + 2 * playerSize) && (bullet._yPos < playeryYPosition + 2 * playerSize))
-        {
-          while(i == 0 && j == 0)
-          if(playerXPosition < bullet._xPos + i < (playerXPosition + playerSize)){console.log('działa')}
-          i += bullet._hitbox
-          if(playerYPosition < bullet._yPos + j < (playerYPosition + playerSize)){console.log('//////działa')}
-          j += bullet._hitbox
+        if(bullet._number == 1){
+          if((bullet._xPos < p2.xPos + 2 * p2.playerSize)
+          && (bullet._yPos < p2.yPos + 2 * p2.playerSize))
+          {
+            while(i == 0 && j == 0){
+              if(p2.xPos < bullet._xPos + i < (p2.xPos + p2.playerSize)){k++}
+              i += bullet._hitbox
+              if(p2.yPos < bullet._yPos + j < (p2.yPos + p2.playerSize)){l++}
+              j += bullet._hitbox
+
+              if(k && l){
+                alert('p2 died')
+                break
+              }
+            }
+          }
+        }
+        if(bullet._number == 2){
+          if((bullet._xPos < p1.xPos + 2 * p1.playerSize)
+          && (bullet._yPos < p1.yPos + 2 * p1.playerSize))
+          {
+            while(i == 0 && j == 0){
+              if(p1.xPos < bullet._xPos + o < (p1.xPos + p1.playerSize)){m++}
+              o += bullet._hitbox
+              if(p1.yPos < bullet._yPos + p < (p1.yPos + p1.playerSize)){n++}
+              p += bullet._hitbox
+
+              if(m && n){
+                debugger
+                break
+              }
+            }
+          }
         }
 
+
+        //FIRST//////////////
+        // if((bullet._number != playerNum) && (bullet._xPos < playerXPosition + 2 * playerSize) && (bullet._yPos < playeryYPosition + 2 * playerSize))
+        // {
+        //   while(i == 0 && j == 0)
+        //   if(playerXPosition < bullet._xPos + i < (playerXPosition + playerSize)){console.log('debugger')}
+        //   i += bullet._hitbox
+        //   if(playerYPosition < bullet._yPos + j < (playerYPosition + playerSize)){console.log('//////działa')}
+        //   j += bullet._hitbox
+        // }
+        //////////////////////////
         //don't touch//////////////////////////////////////////////
         // while((10 * j + i < playerSize * playerSize) && 10 * l + k < bullet._hitbox * bullet._hitbox){
           
