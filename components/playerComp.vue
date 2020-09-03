@@ -90,6 +90,7 @@ export default {
   },
   mounted(){
     this.animate()
+    this.shoot()
       // let {wPressed, sPressed, aPressed, dPressed} = this;
     document.addEventListener('keydown', event => {
       // let {wPressed, sPressed, aPressed, dPressed} = this
@@ -171,7 +172,7 @@ export default {
   },
   methods:{
 
-    animate() {
+    async animate() {
       
       let {id, yVel, xVel, pistolHitbox, p1Shoot, p2Shoot, wPressed, sPressed, aPressed, dPressed, upPressed, downPressed, leftPressed, rightPressed, player, slowing, SPEED, speedLimit, canvas, context, playerSize} = this 
       canvas = document.querySelector('#game');
@@ -256,18 +257,17 @@ export default {
       //     }, 1000)
       //   }
 
-      this.shoot()
 
       // if(id == 2 && p2Shoot){this.$emit('shot-by', id);}
 
-      this.$emit('check-hitbox', {yPos, xPos, playerSize, id})
+      this.$emit('check-hitbox', {playerSize, id})
         this.i++
       requestAnimationFrame(() => {
-          this.animate();
+        this.animate();
       });
     },
-     shoot(){
-        let {id,timeout, yVel, xVel, pistolHitbox, p1Shoot, p2Shoot, wPressed, sPressed, aPressed, dPressed, upPressed, downPressed, leftPressed, rightPressed, player, slowing, SPEED, speedLimit, canvas, context, playerSize} = this 
+     async shoot(){
+      let {id,timeout, yVel, xVel, pistolHitbox, p1Shoot, p2Shoot, wPressed, sPressed, aPressed, dPressed, upPressed, downPressed, leftPressed, rightPressed, player, slowing, SPEED, speedLimit, canvas, context, playerSize} = this 
 
       let xPos = player.x
 
@@ -278,20 +278,33 @@ export default {
         
         this.$emit('shot-by', {id, yVel, xVel, yPos, xPos });
         timeout = true
+        
       }
-        console.log(timeout)
+        
+      
+        
       if(timeout){
-         this.setTimeoutToFalse()
-
+        await this.sleep(1000)
+        timeout = false
       }
+      if(!timeout){
+        setTimeout(() => {
+          this.shoot() 
+          
+        }, 1);
+      }
+      
     },
     setTimeoutToFalse(){
       setTimeout(function() {
         this.timeout = false
       }, 1000);
+    },
+    async sleep(ms){
+     return await new Promise(resolve => setTimeout(resolve, ms));
     }
 
-  },
+  },///aljkhfoijahhjjjjjasdasdkasdkjasda
 }
 </script>
 <style scoped>

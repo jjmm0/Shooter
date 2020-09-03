@@ -5,8 +5,10 @@
       </canvas>
       <canvas id="game" width="800" height="800"></canvas>
       <button id="newbul" @click="newBullet()">asdfasdf</button>{{}}
-      <Player :id="1" :mode="mode" @shot-by="handleShot($event)" @check-hitbox="checkHitbox($event)"/>
-      <Player :id="2" :mode="mode" @shot-by="handleShot($event)"/>
+      <Player :id="1" :mode="mode" :sendData="sendData" :neededId="neededId" @shot-by="handleShot($event)" 
+      @check-hitbox="checkHitbox($event)" @sending-data="handleSentData($event)"/>
+      <Player :id="2" :mode="mode" :sendData="sendData" :neededId="neededId" @shot-by="handleShot($event)" 
+      @check-hitbox="checkHitbox($event)" @sending-data="handleSentData($event)"/>
     </div>
   </div>
 </template>
@@ -22,8 +24,16 @@ export default {
     return{
       bullets:[],
       playerId: 0,
-      i: 0,
+      sendData: false,
+      neededId: 0, 
       // timeout: false
+      i: 0,
+      j: 0,
+      k: 0,
+      l: 0,
+      p1:{xPos,yPos,playerSize,id},
+      p2:{xPos,yPos,playerSize,id}
+
       
     }
   },
@@ -37,23 +47,35 @@ export default {
     this.animBullet()
   },
   methods:{
-    async animBullet()
-    {
+    async animBullet(){
       await this.paintBullets()
-      this.i++;
+
       requestAnimationFrame(() => {
-          this.animBullet();
+        this.animBullet();
       });
 
     },
     handleShot(args){
-
-        this.newBullet(args)
-
+      this.newBullet(args)
     },
     newBullet(args){
       let {bullets, playerId} = this
       bullets.push(new Bullet(args.id, args.yVel, args.xVel, 90, 10, args.xPos, args.yPos))
+    },
+    handleSentData(playerData){
+      if(playerData.id == 1){
+        p1.xPos = playerData.xPos
+        p1.yPos = playerData.yPos
+        p1.playerSize = playerData.playerSize
+        p1.id = playerData.id
+      }
+      if(playerData.id == 2){
+        p2.xPos = playerData.xPos
+        p2.yPos = playerData.yPos
+        p2.playerSize = playerData.playerSize
+        p2.id = playerData.id
+      }
+      
     },
     paintBullets(){
       //variables
@@ -70,7 +92,11 @@ export default {
         context.fillRect(bullet._xPos, bullet._yPos, bullet._hitbox, bullet._hitbox)
       });
     },
+    
     checkHitbox(args){
+      this.sendData = true
+      if(args.id == 2){this.neededId = 1}
+      if(args.id == 1){this.neededId = 2 }
       let playerXPosition = args.xPos;
       let playerYPosition = args.yPos;
       let playerNum = args.id;
@@ -78,44 +104,63 @@ export default {
 
       
       //for player
-      let i = 0
-      let j = 0
-      //for bullet
-      let k = 0
-      let l = 0
+      let {i,j,k,l} = this
+      console.log('działa')
       this.bullets.forEach(bullet =>  {     
-        while(10 * j + i < playerSize){
-
-          while(10 * l + k < bullet._hitbox){
-          
-            
-            if((playerXPosition + i == bullet._xPos + k) && (playerYPosition + j == bullet._Pos + l))
-            {
-              console.log('działa')
-            }
-
-            //ending of loop
-            k++
-            if(k == bullet._hitbox){k = 0, l++}
-          }
-
-          //ending of loop
-          i++
-          if(i == playerSize){i = 0, j++}
+        
+        if((bullet._number != playerNum) && (bullet._xPos < playerXPosition + 2 * playerSize) && (bullet._yPos < playeryYPosition + 2 * playerSize))
+        {
+          while(i == 0 && j == 0)
+          if(playerXPosition < bullet._xPos + i < (playerXPosition + playerSize)){console.log('działa')}
+          i += bullet._hitbox
+          if(playerYPosition < bullet._yPos + j < (playerYPosition + playerSize)){console.log('//////działa')}
+          j += bullet._hitbox
         }
+
+        //don't touch//////////////////////////////////////////////
+        // while((10 * j + i < playerSize * playerSize) && 10 * l + k < bullet._hitbox * bullet._hitbox){
+          
+        //   console.log(`-----------PLAYER pixel number = ${i} and ${j}`)
+        //   while(k <10 && l < 10){
+          
+        //     console.log(`bullet pixel number = ${k} and ${l}`)
+        //     if((Math.floor(playerXPosition + i) == Math.floor(bullet._xPos + k)) 
+        //     && (Math.floor(playerYPosition + j) == Math.floor(bullet._yPos + l)) 
+        //     && bullet._number != playerNum)
+        //     {
+        //       console.log('działa')
+        //       debugger
+        //     }
+
+        //     //ending of loop
+
+
+        //     k++
+            
+        //     if(k == bullet._hitbox){
+        //       k = 0;
+        //       l++;
+        //       }
+        //     }
+
+        //     //ending of loop
+        //     i++
+        //     if(i == playerSize){
+        //       i = 0;
+        //       j += 1;
+              
+        //     }
+        //   }
+        // })
       })
-
-
-      
-
-      
-    }
+    },
   },
+  
   props:{
       mode: String
   },
-  
 }
+
 </script>
 <style scoped>
 @import '~/assets/styles/indexStyles.css';
