@@ -1,7 +1,9 @@
 canvas {
-    border: 1px dashed green;
+    border: 2px solid black;
     position: absolute;
-
+}
+.canvas{
+    margin-left: 10px;
 }
 #newbul{
     margin-left: 800px;
@@ -11,6 +13,11 @@ canvas {
 }
 .header{
     font-size: 60px;
-    text-shadow: 4px 4px 6px rgb(248, 82, 5);
+    text-shadow: 4px 4px 2px rgb(248, 82, 5);
     text-align: center;
+}
+.controls{
+    margin-left: 900px;
+    text-shadow: 4px 4px 6px rgb(248, 82, 5);
+    font-size: 32px;
 }

@@ -7,7 +7,12 @@
       </div>
     <HomePage @change-gamemode="changeMode($event)" v-if="!mode"/>
     <div class="gra" v-if="mode == 'multi'">
-      <MultiGame :mode="mode"/>
+      <MultiGame :mode="mode" class="canvas"/>
+    </div>
+    <div class="controls">
+      Gracz 1: WSAD = poruszanie SPACJA = strzał
+      <br>
+      Gracz 2: STRZAŁKI = poruszanie SLASH = strzał
     </div>
     
   </div>

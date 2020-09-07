@@ -21,7 +21,7 @@ export default {
         xSpeed: 0,
         ySpeed: 0
       },
-      playerSize: 10,
+      playerSize: 20,
       //buttons
       wPressed: false,
       sPressed: false,
@@ -37,7 +37,7 @@ export default {
       //speed variable
       SPEED: 1,
       speedLimit: 5,
-      slowing: 0.1,
+      slowing: 1,
       //obstacles
       //id
       i: 0,
@@ -87,7 +87,7 @@ export default {
   props:{
       mode: String,
       id: Number,
-      neededId: String,
+      
       sendData: Boolean,
   },
   mounted(){
@@ -201,9 +201,9 @@ export default {
         if(this.mode){
           if(id == 1){
             if(player.y < 1){wPressed = false; slowing = speedLimit; player.y = 1}
-            if(player.y > canvas.height - playerSize){sPressed = false; slowing = speedLimit; player.y = 789}
+            if(player.y > canvas.height - playerSize){sPressed = false; slowing = speedLimit; player.y = canvas.height - playerSize - 1}
             if(player.x < 1){aPressed = false; slowing = speedLimit; player.x = 1}
-            if(player.x > canvas.width - playerSize){dPressed = false; slowing = speedLimit; player.x = 789}
+            if(player.x > canvas.width - playerSize){dPressed = false; slowing = speedLimit; player.x = canvas.width - playerSize - 1 }
           }
         }
         //for arrows
