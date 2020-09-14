@@ -23,4 +23,12 @@ canvas {
   text-shadow: 4px 4px 6px #f85205;
   font-size: 32px;
 }
+
+#volumeHandler {
+  margin-left: 900px;
+}
+
+p {
+  margin-left: 900px;
+}
 /*# sourceMappingURL=indexStyles.css.map */

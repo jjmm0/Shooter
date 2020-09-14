@@ -11,15 +11,19 @@
       @check-hitbox="checkHitbox($event)" @sending-data="handleSentData($event)"/>
     </div>
     <audio ref="ptero" src="../assets/pterod.mp4" ></audio>
+    <p>Głośność <strong>(UWAGA JEST GLOSNE W CHU)</strong></p>
+    <Vol  @vol="changeVol($event)" id="volumeHandler"/>
   </div>
 </template>
 <script>
 import Player from '~/components/playerComp.vue'
-import Bullet from '~/classes/Bullet.js'
+import Bullet from '~/classes/Bullet.js' 
+import Vol from '~/components/Volume.vue' 
 
 export default {
   components:{
-    Player
+    Player,
+    Vol
   },
   data(){
     return{
@@ -38,7 +42,7 @@ export default {
       p: 0,
 
       loopIndex: 0,
-
+      volume: 0.50,
       bulletXAdd: 0,
       bulletYAdd: 0,
       playerXAdd: 10,
@@ -58,7 +62,10 @@ export default {
     this.handleBullet()
   },
   methods:{
-      playSound (sound) {
+    changeVol(vol){
+      this.volume = vol
+    },
+    playSound (sound) {
       if(sound) {
         var audio = new Audio(sound);
         audio.play();
@@ -133,6 +140,9 @@ export default {
         let dead3 = false
         let dead4 = false
 
+        const krzyk = new Audio('../assets/pterod.mp3')
+        // krzyk.volume = 0.1
+
         let canvas = document.querySelector('.game');
        let context = canvas.getContext('2d');
         //for player
@@ -147,13 +157,13 @@ export default {
             if((bullet._xPos < p2.xPos + 2 * p2.playerSize)
             && (bullet._yPos < p2.yPos + 2 * p2.playerSize)){
               while(loopIndex < 4){
-                
+                debugger
                 if(loopIndex == 1){bulletXAdd = bullet._hitbox}
                 if(loopIndex == 2){bulletXAdd = bullet._hitbox; bulletYAdd = bullet._hitbox}
-                if(loopIndex == 3){bulletXAdd = bullet._hitbox}
+                if(loopIndex == 3){bulletYAdd = bullet._hitbox; bulletXAdd = 0}
 
-                if(bullet._xPos >= p2.xPos && (bullet._xPos + bulletXAdd) <= (p2.xPos + p2.playerSize)){dead1 = true}
-                if(bullet._yPos >= p2.yPos && (bullet._yPos + bulletYAdd) <= (p2.yPos + p2.playerSize)){dead2 = true}
+                if((bullet._xPos + bulletXAdd) >= p2.xPos && (bullet._xPos + bulletXAdd) <= (p2.xPos + p2.playerSize)){dead1 = true}
+                if((bullet._yPos + bulletYAdd)>= p2.yPos && (bullet._yPos + bulletYAdd) <= (p2.yPos + p2.playerSize)){dead2 = true}
                 
                 if((bullet._xPos > p2.xPos + 2 * p2.playerSize) && (bullet._yPos > p2.yPos + 2 * p2.playerSize)){
                   break
@@ -161,6 +171,11 @@ export default {
                 // if(p2.yPos < bullet._yPos + j < (p2.yPos + p2.playerSize)){l++}
                 if(dead1 && dead2){ 
                   // alert('dead')
+                  // krzyk.play()
+                  
+                  
+                  this.$refs.ptero.volume = this.volume
+                  
                   this.$refs.ptero.play()
                   bullet.active = false
                   break
@@ -179,8 +194,8 @@ export default {
                 if(loopIndex == 2){bulletXAdd = bullet._hitbox; bulletYAdd = bullet._hitbox}
                 if(loopIndex == 3){bulletXAdd = bullet._hitbox}
 
-                if(bullet._xPos >= p1.xPos && (bullet._xPos + bulletXAdd) <= (p1.xPos + p1.playerSize)){dead3 = true}
-                if(bullet._yPos >= p1.yPos && (bullet._yPos + bulletYAdd) <= (p1.yPos + p1.playerSize)){dead4 = true}
+                if((bullet._xPos + bulletXAdd) >= p1.xPos && (bullet._xPos + bulletXAdd) <= (p1.xPos + p1.playerSize)){dead3 = true}
+                if((bullet._yPos + bulletYAdd)>= p1.yPos && (bullet._yPos + bulletYAdd) <= (p1.yPos + p1.playerSize)){dead4 = true}
                 
                 if((bullet._xPos > p1.xPos + 2 * p1.playerSize) && (bullet._yPos > p1.yPos + 2 * p1.playerSize)){
                   break
@@ -188,8 +203,8 @@ export default {
                 // if(p2.yPos < bullet._yPos + j < (p2.yPos + p2.playerSize)){l++}
                 if(dead3 && dead4){ 
                   // alert('dead')
+                  this.$refs.ptero.volume = this.volume
                   this.$refs.ptero.play()
-
                   bullet.active = false
                   break
                 }
@@ -205,7 +220,8 @@ export default {
   },
   
   props:{
-      mode: String
+      mode: String,
+      
   },
 }
 

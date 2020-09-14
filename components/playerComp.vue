@@ -205,6 +205,12 @@ export default {
             if(player.x < 1){aPressed = false; slowing = speedLimit; player.x = 1}
             if(player.x > canvas.width - playerSize){dPressed = false; slowing = speedLimit; player.x = canvas.width - playerSize - 1 }
           }
+          if(id == 2){
+            if(player.y < 1){wPressed = false; slowing = speedLimit; player.y = 1}
+            if(player.y > canvas.height - playerSize){sPressed = false; slowing = speedLimit; player.y = canvas.height - playerSize - 1}
+            if(player.x < 1){aPressed = false; slowing = speedLimit; player.x = 1}
+            if(player.x > canvas.width - playerSize){dPressed = false; slowing = speedLimit; player.x = canvas.width - playerSize - 1 }
+          }
         }
         //for arrows
         if(id == 2){
